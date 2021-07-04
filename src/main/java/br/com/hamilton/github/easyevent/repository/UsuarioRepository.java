@@ -7,5 +7,5 @@ import br.com.hamilton.github.easyevent.model.Usuario;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-
+	
 }
