@@ -1,13 +1,11 @@
 package br.com.hamilton.github.easyevent.usuario;
 
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.AfterEach;
@@ -17,7 +15,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @SpringBootTest
@@ -96,7 +93,7 @@ public class UsuarioServiceTestes {
 	
 	//Esse método valida o erro na atualização do usuário
 	@Test
-	public void testeFalhaAtualizarUsuario() {
+	public void testeAtualizarUsuarioFalha() {
 		System.out.println("###ATUALIZAR-FALHAR###");
 		Optional<Usuario> usuario = service.buscarUsuarioPorEmail("emailinexistente@gmail.com");
 		Exception excecao = assertThrows(Exception.class, () -> {
