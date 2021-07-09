@@ -12,8 +12,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import org.springframework.web.bind.annotation.ExceptionHandler;
-
 import lombok.Data;
 
 @Entity
@@ -38,7 +36,7 @@ public class Usuario implements Serializable{
 	private String email;
 	
 	@NotBlank
-	@Size(min = 8, max = 20, message = "A SENHA deve conter no MÍNIMO 8 CARACTERES e no MÁXIMO 20.")
+	@Size(min = 8, message = "A SENHA deve conter no MÍNIMO 8 CARACTERES.")
 	@Column(nullable = false)
 	private String senha;
 }

@@ -6,6 +6,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.hamilton.github.easyevent.util.Bcrypt;
+
 @Service
 public class UsuarioService implements UsuarioServiceInterface{
 
@@ -14,6 +16,7 @@ public class UsuarioService implements UsuarioServiceInterface{
 	
 	@Override
 	public Usuario salvarUsuario(Usuario usuario ) {
+		usuario.setSenha(Bcrypt.getHash(usuario.getSenha()));
 		Usuario usuarioSalvo = repository.save(usuario);
 		return usuarioSalvo;
 	}

@@ -17,6 +17,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.hamilton.github.easyevent.util.Bcrypt;
+
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
@@ -47,13 +49,11 @@ public class UsuarioControllerTestes {
 		.andExpect(status().isCreated());
 	}
 	
-	
-	
 	public String retornarUsuarioMock() throws JsonProcessingException {
 		Usuario usuario = new Usuario();
 		usuario.setEmail(EMAIL);
 		usuario.setNome(NOME);
-		usuario.setSenha(SENHA);
+		usuario.setSenha(Bcrypt.getHash(SENHA));
 		
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.writeValueAsString(usuario);
