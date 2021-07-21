@@ -18,20 +18,9 @@ public class UsuarioService implements UsuarioServiceInterface{
 	public Usuario salvarUsuario(Usuario usuario ) {
 		usuario.setSenha(Bcrypt.getHash(usuario.getSenha()));
 		Usuario usuarioSalvo = repository.save(usuario);
+		usuarioSalvo.setSenha(null);
 		return usuarioSalvo;
 	}
-
-	@Override
-	public Optional<Usuario> buscarUsuarioPorEmail(String email) {
-		Optional<Usuario> usuarioRecuperado = repository.findByEmail(email);
-		return usuarioRecuperado;		
-	}
-	
-	@Override
-	public void excluirUsuario(Long id) {
-		repository.deleteById(id);
-	}
-
 	
 	@Override
 	public Usuario atualizarUsuario(Long id, Usuario usuario) {
@@ -39,11 +28,28 @@ public class UsuarioService implements UsuarioServiceInterface{
 		if(usuarioSalvo.isPresent()) {
 			//Copia as propriedades de um objeto para o outro ignorando o "id"
 			BeanUtils.copyProperties(usuario, usuarioSalvo.get(), "id");
-			repository.save(usuarioSalvo.get());
+			salvarUsuario(usuarioSalvo.get());
 			return usuarioSalvo.get();
 		}else {
 			return usuarioSalvo.orElseThrow();
 		}	
+	}
+	
+	@Override
+	public void excluirUsuario(Long id) {
+		repository.deleteById(id);
+	}
+	
+	@Override
+	public Optional<Usuario> buscarUsuarioPorEmail(String email) {
+		Optional<Usuario> usuarioRecuperado = repository.findByEmail(email);
+		return usuarioRecuperado;		
+	}
+
+	@Override
+	public Optional<Usuario> findById(Long id) {
+		Optional<Usuario> usuarioRecuperado = repository.findById(id);
+		return usuarioRecuperado;
 	}
 	
 }

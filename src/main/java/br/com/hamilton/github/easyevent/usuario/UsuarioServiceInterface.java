@@ -4,11 +4,16 @@ import java.util.Optional;
 
 public interface UsuarioServiceInterface {
 
+	//Requisitos Funcionais (O Usuario poderá SALVAR, ATUALIZAR e DELETAR sua conta)
 	public Usuario salvarUsuario(Usuario usuario);
 	
-	public Optional<Usuario> buscarUsuarioPorEmail(String email);
+	public Usuario atualizarUsuario(Long Id, Usuario usuario);
 	
 	public void excluirUsuario(Long id);
 	
-	public Usuario atualizarUsuario(Long Id, Usuario usuario);
+	//Métodos para execução dos Requisitos
+	public Optional<Usuario> buscarUsuarioPorEmail(String email);
+	
+	public Optional<Usuario> findById(Long id);
+	
 }
