@@ -1,7 +1,9 @@
 package br.com.hamilton.github.easyevent.usuario;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import java.util.Optional;
 
@@ -47,11 +49,30 @@ public class UsuarioControllerTestes {
 	@Test
 	public void testeSalvarUsuario() throws JsonProcessingException, Exception {
 		System.out.println("###SALVAR USUARIO - CONTROLLER###");
+		String mock = transformarUsuarioEmStringPayLoad();
 		mvc.perform(MockMvcRequestBuilders.post(URL)
-				.content(retornarUsuarioMock())
+				.content(mock)
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))
 		.andExpect(status().isCreated())
+		.andDo(print());
+	}
+	
+	@Test
+	public void testeAtualizarUsuario() throws Exception {
+		System.out.println("###ATUALIZAR USUARIO - CONTROLLER###");
+		BDDMockito.given(service.findById(Mockito.anyLong())).willReturn(Optional.of(retornarUsuarioMock()));
+		BDDMockito.given(service.atualizarUsuario(Mockito.anyLong(), Mockito.any(Usuario.class))).willReturn(new Usuario(1L, "TesteAtualizar", "emailatualizar@gmail.com", Bcrypt.getHash(SENHA)));
+		
+		String mock = transformarUsuarioEmStringPayLoad();
+		mvc.perform(MockMvcRequestBuilders.put(URL+"/{id}", "1")
+				.content(mock)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+		.andExpect(status().isCreated())
+		.andExpect(jsonPath("$.id", is(1)))
+		.andExpect(jsonPath("$.nome", is("TesteAtualizar")))
+		.andExpect(jsonPath("$.email", is("emailatualizar@gmail.com")))
 		.andDo(print());
 	}
 	
@@ -67,14 +88,19 @@ public class UsuarioControllerTestes {
 		.andDo(print());
 	}
 	
-	public String retornarUsuarioMock() throws JsonProcessingException {
+	public Usuario retornarUsuarioMock() {
 		Usuario usuario = new Usuario();
 		usuario.setId(ID);
 		usuario.setEmail(EMAIL);
 		usuario.setNome(NOME);
 		usuario.setSenha(Bcrypt.getHash(SENHA));
-		
+		return usuario;
+	}
+	
+	public String transformarUsuarioEmStringPayLoad() throws JsonProcessingException {
+		//Transorma um objeto em String JSON
 		ObjectMapper mapper = new ObjectMapper();
-		return mapper.writeValueAsString(usuario);
+		String mock = mapper.writeValueAsString(retornarUsuarioMock());
+		return mock;
 	}
 }
